@@ -1,0 +1,44 @@
+<html>
+<head>
+<style>
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;    /* vertical */
+    justify-content: center;/* horizontal */
+    overflow: hidden;
+}
+</style>
+</head>
+<body>
+    <canvas id="kanvas" width="400" height="400"></canvas>
+<script>
+
+const Kanvas = document.getElementById("kanvas")
+const KanvasKontext = Kanvas.getContext("2d")
+
+window.addEventListener("message",(event)=>{
+    //event.data = {innerRadius,outerRadius,colorString,startAngle,endAngle}
+    
+    let cx = Kanvas.width / 2
+    let cy = Kanvas.height / 2
+
+    let GetInnerRadius = event.data.innerR
+    let GetOuterRadius = event.data.outerR
+    let GetColor = event.data.color
+    let GetAngleStart = event.data.startAngle * -1
+    let GetAngleEnd = event.data.endAngle * -1
+
+    KanvasKontext.beginPath();
+    KanvasKontext.arc(cx,cy,GetOuterRadius,GetAngleEnd,GetAngleStart,false);
+    KanvasKontext.arc(cx,cy,GetInnerRadius,GetAngleStart,GetAngleEnd,true);
+    KanvasKontext.closePath();
+    KanvasKontext.fillStyle = GetColor;
+    KanvasKontext.fill();
+})
+
+</script>
+</body>
+</html>
