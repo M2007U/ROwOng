@@ -20,23 +20,28 @@ const Kanvas = document.getElementById("kanvas")
 const KanvasKontext = Kanvas.getContext("2d")
 
 window.addEventListener("message",(event)=>{
-    //event.data = {innerRadius,outerRadius,colorString,startAngle,endAngle}
-    
+    //event.data = [dataBlock0, dataBlock1, ..., dataBlockN]
+    //dataBlock = {innerRadius,outerRadius,colorString,startAngle,endAngle}
+
     let cx = Kanvas.width / 2
     let cy = Kanvas.height / 2
 
-    let GetInnerRadius = event.data.innerR
-    let GetOuterRadius = event.data.outerR
-    let GetColor = event.data.color
-    let GetAngleStart = event.data.startAngle * -1
-    let GetAngleEnd = event.data.endAngle * -1
+    for(let i = 0 ; i < event.data.length ; i++)
+    {
+        let GetInnerRadius = event.data[i].innerR
+        let GetOuterRadius = event.data[i].outerR
+        let GetColor = event.data[i].color
+        let GetAngleStart = event.data[i].startAngle * -1
+        let GetAngleEnd = event.data[i].endAngle * -1
 
-    KanvasKontext.beginPath();
-    KanvasKontext.arc(cx,cy,GetOuterRadius,GetAngleEnd,GetAngleStart,false);
-    KanvasKontext.arc(cx,cy,GetInnerRadius,GetAngleStart,GetAngleEnd,true);
-    KanvasKontext.closePath();
-    KanvasKontext.fillStyle = GetColor;
-    KanvasKontext.fill();
+        KanvasKontext.beginPath();
+        KanvasKontext.arc(cx,cy,GetOuterRadius,GetAngleEnd,GetAngleStart,false);
+        KanvasKontext.arc(cx,cy,GetInnerRadius,GetAngleStart,GetAngleEnd,true);
+        KanvasKontext.closePath();
+        KanvasKontext.fillStyle = GetColor;
+        KanvasKontext.fill();
+    }
+
 })
 
 </script>
