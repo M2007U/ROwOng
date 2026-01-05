@@ -25,14 +25,15 @@ window.addEventListener("message",(event)=>{
 
     let cx = Kanvas.width / 2
     let cy = Kanvas.height / 2
+    let AngleConversionCONSTANT = -1 / 180 * Math.PI
 
     for(let i = 0 ; i < event.data.length ; i++)
     {
-        let GetInnerRadius = event.data[i].innerR
-        let GetOuterRadius = event.data[i].outerR
-        let GetColor = event.data[i].color
-        let GetAngleStart = event.data[i].startAngle * -1
-        let GetAngleEnd = event.data[i].endAngle * -1
+        let GetInnerRadius = event.data[i].ri
+        let GetOuterRadius = event.data[i].ro
+        let GetColor = event.data[i].co
+        let GetAngleStart = event.data[i].as * AngleConversionCONSTANT
+        let GetAngleEnd = event.data[i].ae * AngleConversionCONSTANT
 
         KanvasKontext.beginPath();
         KanvasKontext.arc(cx,cy,GetOuterRadius,GetAngleEnd,GetAngleStart,false);
