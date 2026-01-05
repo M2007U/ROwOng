@@ -5,42 +5,58 @@ html, body {
     margin: 0;
     width: 100%;
     height: 100%;
-    display: flex;
-    align-items: center;    /* vertical */
-    justify-content: center;/* horizontal */
     overflow: hidden;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 </style>
 </head>
 <body>
-    <canvas id="kanvas" width="400" height="400"></canvas>
+    <canvas id="kanvas"></canvas>
 <script>
 
 const Kanvas = document.getElementById("kanvas")
 const KanvasKontext = Kanvas.getContext("2d")
 
+function resizeCanvas() {
+    Kanvas.width  = window.innerWidth;
+    Kanvas.height = window.innerHeight;
+}
+
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas(); // initial call
+
+
 window.addEventListener("message",(event)=>{
     //event.data = [dataBlock0, dataBlock1, ..., dataBlockN]
     //dataBlock = {innerRadius,outerRadius,colorString,startAngle,endAngle}
-
-    let cx = Kanvas.width / 2
-    let cy = Kanvas.height / 2
-    let AngleConversionCONSTANT = -1 / 180 * Math.PI
+    KanvasKontext.clearRect(0, 0, Kanvas.width, Kanvas.height);
 
     for(let i = 0 ; i < event.data.length ; i++)
     {
-        let GetInnerRadius = event.data[i].ri
-        let GetOuterRadius = event.data[i].ro
-        let GetColor = event.data[i].co
-        let GetAngleStart = event.data[i].as * AngleConversionCONSTANT
-        let GetAngleEnd = event.data[i].ae * AngleConversionCONSTANT
+        if (event.data[i].opr === "ring")
+        {
+            let cx = Kanvas.width / 2
+            let cy = Kanvas.height / 2
+            let AngleConversionCONSTANT = -1 / 180 * Math.PI
 
-        KanvasKontext.beginPath();
-        KanvasKontext.arc(cx,cy,GetOuterRadius,GetAngleEnd,GetAngleStart,false);
-        KanvasKontext.arc(cx,cy,GetInnerRadius,GetAngleStart,GetAngleEnd,true);
-        KanvasKontext.closePath();
-        KanvasKontext.fillStyle = GetColor;
-        KanvasKontext.fill();
+            let GetInnerRadius = event.data[i].ri
+            let GetOuterRadius = event.data[i].ro
+            let GetColor = event.data[i].co
+            let GetAngleStart = event.data[i].as * AngleConversionCONSTANT
+            let GetAngleEnd = event.data[i].ae * AngleConversionCONSTANT
+
+            KanvasKontext.beginPath();
+            KanvasKontext.arc(cx,cy,GetOuterRadius,GetAngleEnd,GetAngleStart,false);
+            KanvasKontext.arc(cx,cy,GetInnerRadius,GetAngleStart,GetAngleEnd,true);
+            KanvasKontext.closePath();
+            KanvasKontext.fillStyle = GetColor;
+            KanvasKontext.fill();
+        }    
     }
 
 })
